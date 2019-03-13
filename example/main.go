@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/ahornerr/dash-button"
+	"github.com/ahornerr/go-dash-button"
 )
 
 func main() {
