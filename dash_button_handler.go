@@ -7,33 +7,40 @@ import (
 	"github.com/krolaw/dhcp4"
 )
 
+// ButtonHandlerFunc defines the function which will be called when a button is pressed
 type ButtonHandlerFunc func(net.HardwareAddr)
 
-type dashButtonHandler struct {
+// DashButtonHandler listens for DHCP requests coming from an Amazon Dash button. The handler provides
+type DashButtonHandler struct {
 	buttonHandlers map[string]ButtonHandlerFunc
 	unknownHandler ButtonHandlerFunc
 }
 
-func defaultUnknownButtonHandler(hwAddr net.HardwareAddr) {
-	log.Printf("Unknown dash button: %s", hwAddr)
+// DefaultUnknownButtonHandler logs that an unknown dash button was pressed, along with it's MAC address
+func DefaultUnknownButtonHandler(hwAddr net.HardwareAddr) {
+	log.Printf("Unknown dash button pressed. MAC address: %s", hwAddr)
+	// Output: Unknown dash button pressed. MAC address: [MAC address]
 }
 
-func NewDashButtonHandler() *dashButtonHandler {
-	return &dashButtonHandler{
+// NewDashButtonHandler creates a new instance of the button handler
+func NewDashButtonHandler() DashButtonHandler {
+	return DashButtonHandler{
 		buttonHandlers: map[string]ButtonHandlerFunc{},
-		unknownHandler: defaultUnknownButtonHandler,
+		unknownHandler: DefaultUnknownButtonHandler,
 	}
 }
 
-func (dbh dashButtonHandler) AddButtonHandler(buttonMAC string, handlerFunc ButtonHandlerFunc) {
+// AddButtonHandler adds a ButtonHandlerFunc to listen for a buttonMAC
+func (dbh DashButtonHandler) AddButtonHandler(buttonMAC string, handlerFunc ButtonHandlerFunc) {
 	dbh.buttonHandlers[buttonMAC] = handlerFunc
 }
 
-func (dbh dashButtonHandler) SetUnknownButtonHandler(handlerFunc ButtonHandlerFunc) {
+// SetUnknownButtonHandler sets the handler function to be called when an unknown button is pressed
+func (dbh DashButtonHandler) SetUnknownButtonHandler(handlerFunc ButtonHandlerFunc) {
 	dbh.unknownHandler = handlerFunc
 }
 
-func (dbh dashButtonHandler) ServeDHCP(req dhcp4.Packet, msgType dhcp4.MessageType, options dhcp4.Options) dhcp4.Packet {
+func (dbh DashButtonHandler) ServeDHCP(req dhcp4.Packet, msgType dhcp4.MessageType, options dhcp4.Options) dhcp4.Packet {
 	// For debugging purposes
 	// fmt.Println(gopacket.NewPacket(req, layers.LayerTypeDHCPv4, gopacket.Default).String())
 
