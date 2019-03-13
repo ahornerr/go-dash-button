@@ -1,5 +1,5 @@
 # go-dash-button
-[![GoDoc](https://godoc.org/github.com/ahornerr/dash-button?status.svg)](https://godoc.org/github.com/ahornerr/dash-button)
+[![GoDoc](https://godoc.org/github.com/ahornerr/go-dash-button?status.svg)](https://godoc.org/github.com/ahornerr/go-dash-button)
 
 This Go library listens for DHCP requests and calls registered handlers when a request is made.
 Typically this will be used for Amazon Dash buttons which, when pressed, connect to WiFI and send a DHCP request.
